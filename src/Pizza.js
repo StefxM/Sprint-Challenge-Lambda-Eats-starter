@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState/*, useEffect*/ } from "react";
+
+//import * as Yup from "yup";
 
 function Pizza() {
+    //state
     const [input, setInput] = useState({
         name:"",
         pizzaSize:"",
@@ -8,25 +11,61 @@ function Pizza() {
         toppings:"",
         instructions:""
     });
+    //changehandler and submit
     const changeHandler = event => {
         setInput({
             ...input, [event.target.name]: event.target.value
         });
     };
 
-    const submit = event => 
+    const submit = e => 
     {
-        event.preventDefault();
+        e.preventDefault();
+    }
+    /* yup schema
+    const formSchema = Yup.object().shape({
+        name: Yup
+            .string()
+            .min(2, "Must be at least 2 characters long")
+            .required("Name is Required")
+    });
+
+    const [errors, setErrors] = useState({
+        name:"",
+    });
+
+    useEffect(() => {
+        formSchema.isValid(input).then(valid => {
+            setButtonDisabled(!valid);
+        });
+    }, [input]);
+
+    const inputChange = e => {
+        e.persist();
     }
 
+    Yup
+        .reach(formSchema, e.target.name)
+        .validate(e.target.value)
+        .then(valid => {
+            setErrors({
+                ...errors, [e.target.name]:""
+            });
+        })
+        .catch(err => {
+            ...errors, 
+            [e.target.name]: err.error()[0]
+        });*/
+        
     return(
         <div>
             <form onSubmit={submit}>
             {/*name box*/}
             <label>Name:<input type="text" name="name" value={input.name} onChange={changeHandler}/></label>
+           {/* {errors.name.length > 2 ? (<p className="error">{errors.name}</p>) : null}*/}
             {/*dropdown of pizza size*/}
             <label> Pizza Size
-                <select id="pizzasize" name="pizzasize"onChange={changeHandler}>
+                <select id="pizzaSize" name="pizzaSize"onChange={changeHandler}>
                     <option value="Bagel BItes">Bagel BItes</option>
                     <option value="Small">Small</option>
                     <option value="Medium">Medium</option>
