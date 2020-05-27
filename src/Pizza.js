@@ -1,8 +1,17 @@
-import React, { useState/*, useEffect*/ } from "react";
+import React, { useState, useEffect } from "react";
 
-//import * as Yup from "yup";
+import * as Yup from "Yup";
 
-function Pizza() {
+import axios from "axios";
+
+const formSchema = Yup.object().shape({
+    name: Yup.string()
+        .min(2, "Must be at least 2 characters long")
+        .required("Name is Required")
+});
+
+const Pizza = () => {
+
     //state
     const [input, setInput] = useState({
         name:"",
@@ -11,60 +20,60 @@ function Pizza() {
         toppings:"",
         instructions:""
     });
+    const [post, setPost] = useState([]);
+
     //changehandler and submit
     const changeHandler = event => {
+        event.persist();
         setInput({
             ...input, [event.target.name]: event.target.value
         });
     };
 
-    const submit = e => 
+    const submit = event => 
     {
-        e.preventDefault();
-    }
-    /* yup schema
-    const formSchema = Yup.object().shape({
-        name: Yup
-            .string()
-            .min(2, "Must be at least 2 characters long")
-            .required("Name is Required")
-    });
+        event.preventDefault();
+        axios
+            .post('https://reqres.in/', input)
+            .then(res => {
+                setPost(res.data);
+            })
+            .catch(err => console.log(err.response));
+    };
+    //yup schema
 
-    const [errors, setErrors] = useState({
+    const [error, setError] = useState({
         name:"",
     });
 
-    useEffect(() => {
-        formSchema.isValid(input).then(valid => {
-            setButtonDisabled(!valid);
-        });
-    }, [input]);
-
-    const inputChange = e => {
-        e.persist();
-    }
-
-    Yup
-        .reach(formSchema, e.target.name)
-        .validate(e.target.value)
-        .then(valid => {
-            setErrors({
-                ...errors, [e.target.name]:""
+    const validate = (e) => {
+        Yup.reach(formSchema, event.target.name)
+        .validate(event.target.value)
+        .then( valid => {
+            setError({
+                ...error, [event.target.name]:""
             });
-        })
+        
         .catch(err => {
-            ...errors, 
-            [e.target.name]: err.error()[0]
-        });*/
+            ...error, [event.target.name]: err.error[0]
+        });
+
+    };
+
+        useEffect(() => {
+            formSchema.isValid(input).then(valid => {
+                setButtonDisabled(!valid);
+            });
+        }, [input]);
         
     return(
         <div>
             <form onSubmit={submit}>
             {/*name box*/}
-            <label>Name:<input type="text" name="name" value={input.name} onChange={changeHandler}/></label>
-           {/* {errors.name.length > 2 ? (<p className="error">{errors.name}</p>) : null}*/}
+            <label htmlFor='name'>Name:<input type="text" name="name" value={input.name} onChange={changeHandler}/></label>
+           {error.name.length > 2 ? (<p className="error">{error.name}</p>) : null}
             {/*dropdown of pizza size*/}
-            <label> Pizza Size
+            <label htmlFor='pizzaSize'> Pizza Size
                 <select id="pizzaSize" name="pizzaSize"onChange={changeHandler}>
                     <option value="Bagel BItes">Bagel BItes</option>
                     <option value="Small">Small</option>
@@ -74,7 +83,7 @@ function Pizza() {
                 </select>
             </label>
             {/* list of sauces */}
-            <label><h3> Choice of sauces:</h3>
+            <label htmlFor='sauces'><h3> Choice of sauces:</h3>
             
             Original Red:<input type="radio" name="sauces" onChange={changeHandler}/>
             Garlic Ranch:<input type="radio" name="sauces" onChange={changeHandler}/>
@@ -83,7 +92,7 @@ function Pizza() {
             Buffalo:<input type="radio" name="sauces" onChange={changeHandler}/>
             </label>
             {/*checklist of toppings*/}
-            <label><h3>Toppings</h3>
+            <label htmlFor='toppings'><h3>Toppings</h3>
             Tomato:
             <input name="toppings" type="checkbox" value="yes" onChange={changeHandler}/>
             Chicken:
@@ -98,13 +107,13 @@ function Pizza() {
 
 
             {/* text input for special instructions*/}
-            <label>Special Instructions</label>
+            <label htmlFor='instructions'>Special Instructions</label>
             <input type="text" name="instructions" onChange={changeHandler} />
 
             <button>Add to order</button>
+            <pre>{JSON.stringify(post, null, 2)}</pre>
             </form>
         </div>
     );
-};
-
+    }
 export default Pizza;
