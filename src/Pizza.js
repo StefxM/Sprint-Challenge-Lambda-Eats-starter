@@ -11,12 +11,11 @@ const Pizza = () => {
     //state
     const [input, setInput] = useState({
         name:"",
-        pizzaSize:"",
+        size:"",
         sauces:"",
         toppings:"",
         instructions:""
     });
-    const [post, setPost] = useState([]);
 
     //changehandler and submit
     const changeHandler = event => {
@@ -25,7 +24,8 @@ const Pizza = () => {
             ...input, [event.target.name]: event.target.value
         });
     };
-
+    const [post, setPost] = useState([]);
+   
     const submit = (e) => 
     {
         e.preventDefault();
@@ -35,10 +35,10 @@ const Pizza = () => {
                 setPost(res.data);
             })
             .catch(err => console.log(err.response));
-    };
+    }
     //yup schema
-    const formSchema = Yup.object().shape({
-        name: Yup.string()
+    const formSchema = yup.object().shape({
+        name: yup.string()
             .min(2, "Must be at least 2 characters long")
             .required("Name is Required")
     });
@@ -48,11 +48,11 @@ const Pizza = () => {
     });
 
     const validate = (e) => {
-        yup.reach(formSchema, event.target.name)
-        .validate(event.target.value)
+        yup.reach(formSchema, e.target.name)
+        .validate(e.target.value)
         .then( valid => {
             setError({
-                ...error, [event.target.name]:""
+                ...error, [e.target.name]:""
             })
         .catch(err => {
             console.log(error)
@@ -60,21 +60,22 @@ const Pizza = () => {
 
     });
 
+        const [buttonDisabled, setButtonDisabled] = useState(true);
+
         useEffect(() => {
-            formSchema.isValid(input).then(valid => {
-                setButtonDisabled(!valid);
-            });
+        formSchema.isValid(input).then(valid => {
+        setButtonDisabled(!valid);
+        });
         }, [input]);
         
     return(
         <div>
             <form onSubmit={submit}>
-            {/*name box*/}
             <label htmlFor='name'>Name:<input type="text" name="name" value={input.name} onChange={changeHandler}/></label>
            {error.name.length > 2 ? (<p className="error">{error.name}</p>) : null}
             {/*dropdown of pizza size*/}
-            <label htmlFor='pizzaSize'> Pizza Size
-                <select id="pizzaSize" name="pizzaSize"onChange={changeHandler}>
+            <label htmlFor='size'> Pizza Size
+                <select id="size" name="size"onChange={changeHandler}>
                     <option value="Bagel BItes">Bagel BItes</option>
                     <option value="Small">Small</option>
                     <option value="Medium">Medium</option>
@@ -110,8 +111,8 @@ const Pizza = () => {
             <label htmlFor='instructions'>Special Instructions</label>
             <input type="text" name="instructions" onChange={changeHandler} />
 
-            <button>Add to order</button>
-            <pre>{JSON.stringify(post, null, 2)}</pre>
+            <button disabled={buttonDisabled}>Add to order</button>
+            
             </form>
         </div>
     );

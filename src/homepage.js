@@ -1,5 +1,5 @@
 import React from "react";
-//import "./assets/pizza.jpg";
+
 import "./index.css"
 
 import styled from "styled-components";
