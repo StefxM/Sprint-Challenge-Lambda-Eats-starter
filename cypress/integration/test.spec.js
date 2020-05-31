@@ -1,6 +1,6 @@
 describe("Testing form input", () => {
 beforeEach(function () {
-    cy.visit("http://localhost:3001/pizza");
+    cy.visit("http://localhost:3005/pizza");
 });
 
 it("Finds the Name input", () => {
@@ -14,7 +14,7 @@ it("checking multiple toppings", () => {
  cy.get('input[type="checkbox"]').check().should(("be.checked"));
 })
 it("submitting the form", () => {
-    cy.get('button').should("be.submit");
+    cy.get('form').submit();
 })
 
 })
