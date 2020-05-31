@@ -1,7 +1,7 @@
 import React from "react";
 
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import Pizza from "./Pizza";
+import Pizza from "./pizza";
 import Homepage from "./homepage";
 
 const App = () => {
@@ -23,3 +23,4 @@ const App = () => {
   );
 };
 export default App;
+  

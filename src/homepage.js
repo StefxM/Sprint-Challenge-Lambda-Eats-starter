@@ -18,7 +18,7 @@ function HomePage() {
         
        <PizzaImg className="pizzapic" src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Pizza_Margherita_stu_spivack.jpg" alt="pizza pic"/>
        
-       <p>Offering "contactless" delivery!</p>
+       <p><h2>Offering "contactless" delivery!</h2></p>
        </div>
     );
 };

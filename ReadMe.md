@@ -13,9 +13,11 @@ Demonstrate your understanding of this week's concepts by answering the followin
 Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your Team Lead.
 
 1. In 1-2 sentences, explain what React's `useRouteMatch` hook is used for.
+
 A hook that lets us add nested routes to the app so that we can change a single parameter in the URL withouth changing the whole URL.
 
 2. How would you explain form validation to someone who has never programmed before?
+
 Form validation is for validating information that the user is submitting like when a page displays a message for a stronger password.
 
 3. In 1-2 sentences, define end to end testing.
